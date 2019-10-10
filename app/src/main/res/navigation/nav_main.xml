@@ -6,22 +6,22 @@
 
     <fragment
             android:id="@+id/navigation_home"
-            android:name="com.labtecs.iam.ui.dashboard.HomeFragment"
-            android:label="Dashboard"
-            tools:layout="@layout/fragment_home" />
+            android:name="br.orgipdec.checkinqrcodepolodigitalmanaus.QRCodeFragment"
+            android:label="Sistema de CheckIn"
+            tools:layout="@layout/qrcode_leitura" >
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_viewqrcode"
+            app:destination="@id/navigation_viewqrcode"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@+id/navigation_home"/>/>
+    </fragment>
+
     <fragment
-            android:id="@+id/navigation_config"
-            android:name="com.labtecs.iam.ui.dashboard.SettingsFragment"
-            android:label="Settings"
-            tools:layout="@layout/fragment_settings" />
-    <fragment
-            android:id="@+id/navigation_people"
-            android:name="com.labtecs.iam.ui.dashboard.ProfileFragment"
-            android:label="Profile"
-            tools:layout="@layout/fragment_profile" />
-    <fragment
-            android:id="@+id/navigation_notification"
-            android:name="com.labtecs.iam.ui.dashboard.NotificationFragment"
-            android:label="Notification"
-            tools:layout="@layout/fragment_notification" />
+        android:id="@+id/navigation_viewqrcode"
+        android:name="br.orgipdec.checkinqrcodepolodigitalmanaus.ViewQRCodeFragment"
+        android:label="Sistema de CheckIn"
+        tools:layout="@layout/qrcode_active" />
 </navigation>

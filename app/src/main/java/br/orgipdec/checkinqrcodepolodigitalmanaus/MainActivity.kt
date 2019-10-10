@@ -3,13 +3,14 @@ package br.orgipdec.checkinqrcodepolodigitalmanaus
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.wifi.hotspot2.pps.HomeSp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,7 +33,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
+
 
         spnSala!!.setOnItemSelectedListener(this)
         spnPalestra!!.setOnItemSelectedListener(this)
@@ -75,7 +78,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         } else {
             // Caso ja aceito o uso da camera
 
-            val intent = Intent(this, QRCodeActivity::class.java)
+            val intent = Intent(this, HostQRCode::class.java)
             startActivity(intent)
             finish()
         }
