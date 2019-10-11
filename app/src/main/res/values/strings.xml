@@ -8,4 +8,6 @@
 
     <string name="organizador_file_key">save_organizador</string>
 
+    <string name="dia_file_key">save_dia</string>
+
 </resources>

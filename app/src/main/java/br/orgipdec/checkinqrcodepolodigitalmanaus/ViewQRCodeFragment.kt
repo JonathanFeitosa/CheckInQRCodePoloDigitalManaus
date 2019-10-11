@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
 import br.orgipdec.checkinqrcodepolodigitalmanaus.utils.DateTime
+import br.orgipdec.checkinqrcodepolodigitalmanaus.utils.SharedPreferences
 import kotlinx.android.synthetic.main.qrcode_active.*
 import kotlinx.android.synthetic.main.qrcode_leitura.*
 
@@ -30,6 +31,7 @@ class ViewQRCodeFragment : Fragment() {
 
         txtQRCODE.setText(getArguments()!!.getString("qrcode")!!);
         txtData.setText(getArguments()!!.getString("data")!!);
+       // SharedPreferences.getOganizador(requireActivity())
 
     }
 }

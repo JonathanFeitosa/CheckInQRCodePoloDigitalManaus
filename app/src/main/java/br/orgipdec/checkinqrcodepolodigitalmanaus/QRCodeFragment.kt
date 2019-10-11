@@ -17,12 +17,25 @@ import br.orgipdec.checkinqrcodepolodigitalmanaus.utils.SharedPreferences
 import kotlinx.android.synthetic.main.qrcode_leitura.*
 import android.text.InputType
 import android.R.attr.inputType
+import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import br.orgipdec.checkinqrcodepolodigitalmanaus.api.ApiErrorCredencial
+import br.orgipdec.checkinqrcodepolodigitalmanaus.api.ApiServiceInterface
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuario
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuarioReturn
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnAPIIPDEC
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login_dialog.view.*
 
 
 class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
     private var mScannerView: ZXingScannerView? = null
+    private val api: ApiServiceInterface = ApiServiceInterface.create()
+    private val subscriptions = CompositeDisposable()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -32,6 +45,9 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        txtInfoMain.setText("Olá ${SharedPreferences.getOganizador(requireActivity())}! A Sala ${SharedPreferences.getSala(requireActivity())} está com X Participantes.")
+        txtOrganization.setText("Evento: ${SharedPreferences.getPalestra(requireActivity())}")
         super.onViewCreated(view, savedInstanceState)
         mScannerView = view.findViewById(R.id.QrCodeID)
         mScannerView!!.setResultHandler(this) // Register ourselves as a handler for scan results.
@@ -61,10 +77,12 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
             MediaPlayer.create(requireActivity(), R.raw.sound_successful).start()
 
-            val bundle = Bundle()
-            bundle.putString("qrcode", rawResult.text)
-            bundle.putString("data", DateTime.currentDataTime)
-            findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
+            var registrarUsuario : RegistrarUsuario = RegistrarUsuario(2, "${rawResult.text}", "${SharedPreferences.getOganizador(requireActivity())}")
+            registrarQRCode(registrarUsuario)
+         //   val bundle = Bundle()
+         //   bundle.putString("qrcode", rawResult.text)
+         //   bundle.putString("data", DateTime.currentDataTime)
+        //    findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
             println(Constants.STOP_CAMERA)
 
@@ -87,23 +105,26 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                 //AlertDialogBuilder
                 val mBuilder = AlertDialog.Builder(requireActivity())
                     .setView(mDialogView)
-                    .setTitle("Login Form")
+                    .setTitle("Registrar QR Code")
                 //show dialog
                 val  mAlertDialog = mBuilder.show()
-                //login button click of custom layout
-                mDialogView.dialogLoginBtn.setOnClickListener {
-                    //dismiss dialog
+                mDialogView.dialogRegistrarBtn.setOnClickListener {
                     mAlertDialog.dismiss()
-                    //get text from EditTexts of custom layout
-               //     val name = mDialogView.dialogNameEt.text.toString()
-          //          val email = mDialogView.dialogEmailEt.text.toString()
-                    val password = mDialogView.dialogPasswEt.text.toString()
-                    //set the input text in TextView
-                  //  mainInfoTv.setText("Name:"+ name +"\nEmail: "+ email +"\nPassword: "+ password)
+
+                    val qrcode = mDialogView.edtQRCode.text.toString()
+
+                    var registrarUsuario : RegistrarUsuario = RegistrarUsuario(2, "${qrcode}", "${SharedPreferences.getOganizador(requireActivity())}")
+                    registrarQRCode(registrarUsuario)
+
+                //    val bundle = Bundle()
+                //    bundle.putString("qrcode", qrcode)
+               //     bundle.putString("data", DateTime.currentDataTime)
+              //      findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
+
                 }
-                //cancel button click of custom layout
+
                 mDialogView.dialogCancelBtn.setOnClickListener {
-                    //dismiss dialog
+
                     mAlertDialog.dismiss()
                 }
 
@@ -114,13 +135,41 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                 SharedPreferences.setInfo(requireActivity(), false)
                 val intent = Intent(requireActivity(), MainActivity::class.java)
                 startActivity(intent)
-              //  finish()
 
                 true
             }
             else ->
                 super.onOptionsItemSelected(item)
         })
+    }
+
+    fun registrarQRCode(ru : RegistrarUsuario) {
+
+       // listaDia  =  ArrayList<String>()
+        var subscribe = api.registrarQRCode(ru).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ success ->
+
+
+                Log.i("Resultadojfs", "Quantidade Pessoas: ${success.contador}")
+                Log.i("Resultadojfs", "Resultado ID: ${success!!.palestra}")
+
+                /*val errorMessage = ApiErrorCredencial(success., "message").message
+
+                //   Conta tem que ser ativada para fazer Login
+                if(errorMessage.equals("activeaccount")) {
+
+                }
+                if(success.jaregistrado == null){
+                    Log.i("Resultadojfs", "entrou")
+                }else{
+                    Log.i("Resultadojfs", "nao entrou")
+                }*/
+
+            }, { error ->
+                Log.i("Resultadojfs", "Erro: : ${error.localizedMessage}")
+            })
+        subscriptions.add(subscribe)
     }
 
 }

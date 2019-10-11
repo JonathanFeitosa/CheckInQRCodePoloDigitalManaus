@@ -42,28 +42,27 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        if (!SharedPreferences.checkInfo(this)) {  // Se for o primeiro Login
 
-        /*
-        TESTES DA API
-         */
-        loadAll()
-
-        Log.i("Resultadojfs", "\n\n\n")
-
-        carregarDia()
-
-         // botar falaw
-        if (SharedPreferences.checkInfo(this)) {  // Se for o primeiro Login
-
-            Log.i("Resultadojfs", "jfs Feitosw\n\n\n")
             SharedPreferences.setInfo(this, true)
 
             setContentView(R.layout.activity_main)
+
+            pbCarregarTela.setVisibility(View.VISIBLE) // VISIBLE PROGRESSBAR
+            carregarDia()
+
             spnDia!!.setOnItemSelectedListener(this)
             spnSala!!.setOnItemSelectedListener(this)
-       //     spnPalestra!!.setOnItemSelectedListener(this)
 
             btnCredenciar.setOnClickListener{
+
+                pbCarregarTela.setVisibility(View.VISIBLE)
+                // Setando Variáveis Globais
+                SharedPreferences.setOrganizador(this, edtOrganizador.text.toString())
+                SharedPreferences.setDia(this, listaDia.get(spnDia.getSelectedItemPosition()))
+                SharedPreferences.setSala(this, listaSala.get(spnSala.getSelectedItemPosition()))
+                SharedPreferences.setPalestra(this, listaPalestra.get(spnPalestra.getSelectedItemPosition()))
+
                 launchActivity()
             }
         }
@@ -80,11 +79,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         when(arg0!!.id) {
             R.id.spnDia ->{
-          //      Toast.makeText(this, "Selected : ${listaDia.get(position)}", Toast.LENGTH_SHORT).show()
+                pbCarregarTela.setVisibility(View.VISIBLE) // VISIBLE PROGRESSBAR
                 carregarSala(listaDia.get(position))
             }
             R.id.spnSala -> {
-          //      Toast.makeText(this, "Selected : ${listaSala.get(position)}", Toast.LENGTH_SHORT).show()
+                pbCarregarTela.setVisibility(View.VISIBLE) // VISIBLE PROGRESSBAR
                 carregarPalestra(listaDia.get(spnDia.getSelectedItemPosition()), listaSala.get(position))
             }
         }
@@ -96,13 +95,15 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun launchActivity() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            pbCarregarTela.setVisibility(View.INVISIBLE)
         //   Caso Nao tenha aceito em nenhum momento o uso da camera
             ActivityCompat.requestPermissions(this,
                 arrayOf(Manifest.permission.CAMERA), ZXING_CAMERA_PERMISSION)
 
+
         } else {
             // Caso ja aceito o uso da camera
-
+            pbCarregarTela.setVisibility(View.INVISIBLE)
             val intent = Intent(this, HostQRCode::class.java)
             startActivity(intent)
             finish()
@@ -123,31 +124,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }
     }
-
-    fun loadAll() {
-
-        var subscribe = api.getJSONAPI().subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ list: ReturnAPIIPDEC? ->
-
-                list!!.days.forEach { // Dias
-                      Log.i("Resultadojfs", "Dia:  ${it.id}")
-                          it.trilha.forEach { // Salas
-                              Log.i("Resultadojfs", "Sala:  ${it.room} - ${it.title}")
-                              it.talks.forEach { // Evento
-                                  Log.i("Resultadojfs", "Evento:  ${it.title}\n\n")
-                              }
-                          }
-                  }
-
-
-            }, { error ->
-                Log.i("Resultadojfs", "Erro: + ${error.message}")
-            })
-
-        subscriptions.add(subscribe)
-    }
-
     fun carregarDia() {
 
         listaDia  =  ArrayList<String>()
@@ -163,10 +139,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val aAdapterDia = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaDia!!.toList())
                 aAdapterDia.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spnDia!!.setAdapter(aAdapterDia)
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
 
 
             }, { error ->
                 Log.i("Resultadojfs", "Erro: : ${error.localizedMessage}")
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
             })
 
         subscriptions.add(subscribe)
@@ -190,8 +168,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val aAdapteSala = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaSala!!.toList())
                 aAdapteSala.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spnSala!!.setAdapter(aAdapteSala)
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
             }, { error ->
                 Log.i("Resultadojfs", "Erro: + ${error.message}")
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
             })
 
         subscriptions.add(subscribe)
@@ -218,10 +198,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 val aAdaptePalestra = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listaPalestra!!.toList())
                 aAdaptePalestra.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spnPalestra!!.setAdapter(aAdaptePalestra)
-
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
 
             }, { error ->
                 Log.i("Resultadojfs", "Erro: + ${error.message}")
+                pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
             })
 
         subscriptions.add(subscribe)

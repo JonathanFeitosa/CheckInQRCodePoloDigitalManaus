@@ -1,6 +1,8 @@
 package br.orgipdec.checkinqrcodepolodigitalmanaus.api
 
 import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuario
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuarioReturn
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnAPIIPDEC
 import io.reactivex.Observable
 import retrofit2.Call
@@ -10,8 +12,11 @@ import retrofit2.http.*
 
 interface ApiServiceInterface {
 
-    @GET("schedule.json")
+    @GET("acesso/schedules")
     fun getJSONAPI(): Observable<ReturnAPIIPDEC>
+
+    @POST("acesso/registrar/")
+    fun registrarQRCode(@Body info : RegistrarUsuario) : Observable<RegistrarUsuarioReturn>
 
     companion object Factory {
         fun create(): ApiServiceInterface {
@@ -28,5 +33,6 @@ interface ApiServiceInterface {
             return retrofit.create(ApiServiceInterface::class.java) // Single-Expression function kotlin
         }
     }
+
 
 }

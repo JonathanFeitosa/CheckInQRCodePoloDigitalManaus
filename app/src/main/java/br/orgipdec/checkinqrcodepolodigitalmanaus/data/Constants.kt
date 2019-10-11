@@ -10,8 +10,8 @@ class Constants {
     companion object{
         const val ERROR = "Error"
         const val HANDLER = "handler"
-        const val BASE_URL = "https://www.ipdec.org/"
+        const val BASE_URL = "https://api-credenciamento.azurewebsites.net/"
+        const val BASE_URL2 = "http://192.168.10.111:8080/"
         const val STOP_CAMERA = "************** Stop Camera**********"
-
     }
 }
