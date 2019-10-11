@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">CheckInQRCodePoloDigitalManaus</string>
+    <string name="info_file_key">save_info</string>
+
+    <string name="sala_file_key">save_sala</string>
+
+    <string name="palestra_file_key">save_palestra</string>
+
+    <string name="organizador_file_key">save_organizador</string>
+
 </resources>

@@ -5,9 +5,7 @@ import android.util.Log
 import com.google.zxing.Result
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import android.media.MediaPlayer
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -18,8 +16,6 @@ import kotlinx.android.synthetic.main.qrcode_leitura.*
 
 
 class ViewQRCodeFragment : Fragment() {
-
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {

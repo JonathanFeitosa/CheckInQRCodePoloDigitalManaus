@@ -33,6 +33,22 @@
             app:layout_constraintTop_toBottomOf="@+id/imgLogo" />
 
         <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spnDia"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/round_edttext"
+            android:hint="Dia"
+            android:inputType="text"
+            android:paddingLeft="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtOrganizador" />
+
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spnSala"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -46,7 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtOrganizador" />
+            app:layout_constraintTop_toBottomOf="@+id/spnDia" />
 
         <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spnPalestra"
@@ -60,7 +76,7 @@
             android:inputType="text"
             android:paddingLeft="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spnSala" />
 
@@ -69,7 +85,6 @@
             android:layout_width="170dp"
             android:layout_height="170dp"
             android:layout_marginTop="30dp"
-            android:layout_marginEnd="16dp"
             android:src="@drawable/ipdec_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
