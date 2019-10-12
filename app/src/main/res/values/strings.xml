@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CheckInQRCodePoloDigitalManaus</string>
+    <string name="app_name">CheckIn Polo Digital</string>
     <string name="info_file_key">save_info</string>
 
     <string name="sala_file_key">save_sala</string>
@@ -9,5 +9,7 @@
     <string name="organizador_file_key">save_organizador</string>
 
     <string name="dia_file_key">save_dia</string>
+
+    <string name="palestraid_file_key">save_idpalestra</string>
 
 </resources>

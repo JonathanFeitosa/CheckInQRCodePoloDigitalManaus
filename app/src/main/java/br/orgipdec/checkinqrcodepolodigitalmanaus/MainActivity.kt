@@ -189,6 +189,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             if ("${it.room} - ${it.title}".equals(trilha)) {
                                 it.talks.forEach {
                                     listaPalestra!!.add(it.title)
+                                    SharedPreferences.setIDPalestra(this, "${it.talkId}")
                                 }
                             }
                         }

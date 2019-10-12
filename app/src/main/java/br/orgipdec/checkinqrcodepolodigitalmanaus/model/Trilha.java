@@ -1,4 +1,3 @@
-
 package br.orgipdec.checkinqrcodepolodigitalmanaus.model;
 
 import java.io.Serializable;

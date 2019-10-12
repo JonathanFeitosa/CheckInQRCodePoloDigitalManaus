@@ -79,6 +79,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
             var registrarUsuario : RegistrarUsuario = RegistrarUsuario(2, "${rawResult.text}", "${SharedPreferences.getOganizador(requireActivity())}")
             registrarQRCode(registrarUsuario)
+
          //   val bundle = Bundle()
          //   bundle.putString("qrcode", rawResult.text)
          //   bundle.putString("data", DateTime.currentDataTime)
@@ -113,13 +114,13 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
                     val qrcode = mDialogView.edtQRCode.text.toString()
 
-                    var registrarUsuario : RegistrarUsuario = RegistrarUsuario(2, "${qrcode}", "${SharedPreferences.getOganizador(requireActivity())}")
+                    var registrarUsuario : RegistrarUsuario = RegistrarUsuario(1, "${qrcode}", "${SharedPreferences.getOganizador(requireActivity())}")
                     registrarQRCode(registrarUsuario)
 
-                //    val bundle = Bundle()
-                //    bundle.putString("qrcode", qrcode)
-               //     bundle.putString("data", DateTime.currentDataTime)
-              //      findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
+            //        val bundle = Bundle()
+              //      bundle.putString("qrcode", qrcode)
+          //          bundle.putString("data", DateTime.currentDataTime)
+               //     findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
                 }
 
@@ -150,9 +151,8 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ success ->
 
-
-                Log.i("Resultadojfs", "Quantidade Pessoas: ${success.contador}")
-                Log.i("Resultadojfs", "Resultado ID: ${success!!.palestra}")
+                Log.i("Resultadojfs", "Nome: ${success.sucesso.participante.name}")
+                Log.i("Resultadojfs", "Nome: ${success.sucesso.participante.lastname}")
 
                 /*val errorMessage = ApiErrorCredencial(success., "message").message
 

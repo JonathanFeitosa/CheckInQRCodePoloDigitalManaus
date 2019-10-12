@@ -4,6 +4,7 @@ import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuario
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuarioReturn
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnAPIIPDEC
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnCredenciado
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -12,11 +13,15 @@ import retrofit2.http.*
 
 interface ApiServiceInterface {
 
+    @Headers(
+        "Accept: application/json",
+        "Content-Type: application/json; charset=utf-8"
+    )
     @GET("acesso/schedules")
     fun getJSONAPI(): Observable<ReturnAPIIPDEC>
 
     @POST("acesso/registrar/")
-    fun registrarQRCode(@Body info : RegistrarUsuario) : Observable<RegistrarUsuarioReturn>
+    fun registrarQRCode(@Body info : RegistrarUsuario) : Observable<ReturnCredenciado>
 
     companion object Factory {
         fun create(): ApiServiceInterface {
@@ -33,6 +38,4 @@ interface ApiServiceInterface {
             return retrofit.create(ApiServiceInterface::class.java) // Single-Expression function kotlin
         }
     }
-
-
 }

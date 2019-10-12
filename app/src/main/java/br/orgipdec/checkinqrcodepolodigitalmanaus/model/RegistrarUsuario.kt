@@ -10,4 +10,5 @@ data class RegistrarUsuario(
 
 data class RegistrarUsuarioReturn(
     @SerializedName("contador") val contador: Int,
-    @SerializedName("palestra") val palestra: Int)
+    @SerializedName("palestra") val palestra: Int,
+    @SerializedName("naocredenciado") val naocredenciado: String? = "teste")

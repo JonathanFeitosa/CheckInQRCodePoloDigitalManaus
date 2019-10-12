@@ -13,6 +13,7 @@ class SharedPreferences {
         private val SET_ORGANIZADOR = "infoorganizador"
         private val SET_SALA = "infosala"
         private val SET_DIA = "infodia"
+        private val SETID_PALESTRA = "infoidpalestra"
 
         fun checkInfo(context: Context): Boolean {
             return context
@@ -57,6 +58,27 @@ class SharedPreferences {
                 commit()
             }
         }
+        fun setIDPalestra(context: Context, state: String?) {
+            val sharedPref = context
+                .getSharedPreferences(
+                    context.getString(R.string.palestraid_file_key),
+                    Context.MODE_PRIVATE
+                )
+            with(sharedPref.edit()) {
+                putString(SETID_PALESTRA, state)
+                commit()
+            }
+        }
+
+        fun getIDPalestra(context: Context) : String? {
+            return context
+                .getSharedPreferences(
+                    context.getString(R.string.palestraid_file_key),
+                    Context.MODE_PRIVATE
+                )
+                .getString(SETID_PALESTRA, null)
+        }
+
         fun getSala(context: Context) : String? {
             return context
                 .getSharedPreferences(

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FCFCFC"
+    android:background="@drawable/background3"
     tools:context=".QRCodeFragment">
 
 
@@ -20,7 +20,7 @@
         android:fontFamily="@font/poppins"
         android:gravity="center"
         android:text="Olá, Jonathan Feitosa de Souza! A Sala 10 está com 50 Participantes."
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -37,7 +37,7 @@
         android:fontFamily="@font/poppins"
         android:gravity="center"
         android:text="Evento: IoT - Conceitos Básicos"
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

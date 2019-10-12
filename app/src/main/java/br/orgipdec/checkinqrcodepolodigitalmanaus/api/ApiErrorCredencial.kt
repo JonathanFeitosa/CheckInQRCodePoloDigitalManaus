@@ -12,11 +12,11 @@ class ApiErrorCredencial constructor(error: Throwable, campo : String) {
             val errorJsonString = error.response()!!
                 .errorBody()?.string()
 
-            if (errorJsonString!!.contains("jaregistrado")) {
-                this.message = "jaregistrado"
-                Log.i("Resultado", "Entrou")
-
-            }
+            message = JsonParser().parse(errorJsonString)
+                .asJsonObject["message"]
+                .asString
+        } else {
+            this.message = error.message ?: this.message
         }
     }
 }

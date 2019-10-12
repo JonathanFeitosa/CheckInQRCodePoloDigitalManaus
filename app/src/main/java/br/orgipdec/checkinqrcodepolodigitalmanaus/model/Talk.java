@@ -1,14 +1,19 @@
-
 package br.orgipdec.checkinqrcodepolodigitalmanaus.model;
+
 
 import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.Speaker;
+
 public class Talk implements Serializable
 {
 
+    @SerializedName("talk-id")
+    @Expose
+    private String talkId;
     @SerializedName("title")
     @Expose
     private String title;
@@ -21,7 +26,15 @@ public class Talk implements Serializable
     @SerializedName("speakers")
     @Expose
     private List<Speaker> speakers = null;
-    private final static long serialVersionUID = -6591935911237755655L;
+    private final static long serialVersionUID = 4679302575148196766L;
+
+    public String getTalkId() {
+        return talkId;
+    }
+
+    public void setTalkId(String talkId) {
+        this.talkId = talkId;
+    }
 
     public String getTitle() {
         return title;
