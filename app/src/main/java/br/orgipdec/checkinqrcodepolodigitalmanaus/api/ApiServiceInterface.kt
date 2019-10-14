@@ -1,10 +1,7 @@
 package br.orgipdec.checkinqrcodepolodigitalmanaus.api
 
 import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuario
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuarioReturn
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnAPIIPDEC
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnCredenciado
+import br.orgipdec.checkinqrcodepolodigitalmanaus.model.*
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -19,6 +16,9 @@ interface ApiServiceInterface {
     )
     @GET("acesso/schedules")
     fun getJSONAPI(): Observable<ReturnAPIIPDEC>
+
+    @GET("/acesso/contar/{id_palestra}")
+    fun getCountPalestra(@Path("id_palestra") id_palestra : Int) : Observable<ReturnCountPalestraIPDEC>
 
     @POST("acesso/registrar/")
     fun registrarQRCode(@Body info : RegistrarUsuario) : Observable<ReturnCredenciado>

@@ -20,8 +20,8 @@ class ViewQRCodeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-         txtQRCODE.setText(getArguments()!!.getString("qrcode")!!);
-        // SharedPreferences.getOganizador(requireActivity())
-       // SharedPreferences.getIDPalestra(requireActivity())
+        txtQRCODE.setText(getArguments()!!.getString("qrcode")!!);
+        txtQtd.setText("${getArguments()!!.getInt("contador")!!}");
+        txtUsuario.setText(getArguments()!!.getString("nomecaboco")!!);
     }
 }

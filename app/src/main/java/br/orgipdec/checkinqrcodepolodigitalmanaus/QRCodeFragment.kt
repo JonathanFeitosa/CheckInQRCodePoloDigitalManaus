@@ -35,18 +35,20 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
     private var mScannerView: ZXingScannerView? = null
     private val api: ApiServiceInterface = ApiServiceInterface.create()
     private val subscriptions = CompositeDisposable()
+    private var contadorPalestra = 404
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        registrarContagem(Integer.parseInt(SharedPreferences.getIDPalestra(requireActivity())!!))
         return inflater.inflate(R.layout.qrcode_leitura, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        txtInfoMain.setText("Olá ${SharedPreferences.getOganizador(requireActivity())}! A Sala ${SharedPreferences.getSala(requireActivity())} está com X Participantes.")
+        txtInfoMain.setText("Olá ${SharedPreferences.getOganizador(requireActivity())}! A Sala ${SharedPreferences.getSala(requireActivity())} está com - Participantes.")
         txtOrganization.setText("Evento: ${SharedPreferences.getPalestra(requireActivity())}")
         super.onViewCreated(view, savedInstanceState)
         mScannerView = view.findViewById(R.id.QrCodeID)
@@ -77,13 +79,8 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
             MediaPlayer.create(requireActivity(), R.raw.sound_successful).start()
 
-            var registrarUsuario : RegistrarUsuario = RegistrarUsuario(2, "${rawResult.text}", "${SharedPreferences.getOganizador(requireActivity())}")
+            var registrarUsuario : RegistrarUsuario = RegistrarUsuario(Integer.parseInt(SharedPreferences.getIDPalestra(requireActivity())!!), "${rawResult.text}", "${SharedPreferences.getOganizador(requireActivity())}")
             registrarQRCode(registrarUsuario)
-
-         //   val bundle = Bundle()
-         //   bundle.putString("qrcode", rawResult.text)
-         //   bundle.putString("data", DateTime.currentDataTime)
-        //    findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
             println(Constants.STOP_CAMERA)
 
@@ -114,13 +111,8 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
                     val qrcode = mDialogView.edtQRCode.text.toString()
 
-                    var registrarUsuario : RegistrarUsuario = RegistrarUsuario(1, "${qrcode}", "${SharedPreferences.getOganizador(requireActivity())}")
+                    var registrarUsuario : RegistrarUsuario = RegistrarUsuario(Integer.parseInt(SharedPreferences.getIDPalestra(requireActivity())!!), "${qrcode}", "${SharedPreferences.getOganizador(requireActivity())}")
                     registrarQRCode(registrarUsuario)
-
-            //        val bundle = Bundle()
-              //      bundle.putString("qrcode", qrcode)
-          //          bundle.putString("data", DateTime.currentDataTime)
-               //     findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
                 }
 
@@ -146,30 +138,61 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
     fun registrarQRCode(ru : RegistrarUsuario) {
 
-       // listaDia  =  ArrayList<String>()
         var subscribe = api.registrarQRCode(ru).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ success ->
 
-                Log.i("Resultadojfs", "Nome: ${success.sucesso.participante.name}")
-                Log.i("Resultadojfs", "Nome: ${success.sucesso.participante.lastname}")
+                Log.i("Resultadojfs", "ID PALESTRA: ${ru.palestra}")
+                Log.i("Resultadojfs", "Mensagem: ${success.msg}")
+                Log.i("Resultadojfs", "Participante: ${success.participante}")
 
-                /*val errorMessage = ApiErrorCredencial(success., "message").message
-
-                //   Conta tem que ser ativada para fazer Login
-                if(errorMessage.equals("activeaccount")) {
-
-                }
-                if(success.jaregistrado == null){
-                    Log.i("Resultadojfs", "entrou")
-                }else{
-                    Log.i("Resultadojfs", "nao entrou")
-                }*/
+                val bundle = Bundle()
+                bundle.putString("qrcode", ru.qrcode)
+                bundle.putInt("contador", contadorPalestra)
+                bundle.putString("nomecaboco", "404")
+                findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
             }, { error ->
-                Log.i("Resultadojfs", "Erro: : ${error.localizedMessage}")
+                var error2 = error
+                var errorMessage = ApiErrorCredencial(error, "msg")
+
+                if(errorMessage.message.equals("registradosucesso")) {
+
+                    Log.i("Resultadojfs", "ID PALESTRA REGISTRADOSUCESSO: ${ru.palestra}")
+                    Log.i("Resultadojfs", "qrcode REGISTRADOSUCESSO: ${ru.qrcode}")
+                    Log.i("Resultadojfs", "contador_2 REGISTRADOSUCESSO: ${ru.qrcode}")
+                    val bundle = Bundle()
+                    bundle.putString("qrcode", ru.qrcode)
+                    bundle.putString("nomecaboco", errorMessage.partipante)
+                    bundle.putInt("contador", contadorPalestra+1)
+                    findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
+
+
+
+                }else {
+
+                    Toast.makeText(requireActivity(), "Erro: ${errorMessage.message}", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.i("Resultadojfs", "erro: ${errorMessage.message}")
+                }
+
             })
         subscriptions.add(subscribe)
     }
 
+    fun registrarContagem(palestra: Int) {
+
+        var subscribe = api.getCountPalestra(palestra).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ success ->
+
+                contadorPalestra = success.contador
+                Log.i("Resultadojfs", "Acerto Contagem: ${contadorPalestra}")
+                txtInfoMain.setText("Olá ${SharedPreferences.getOganizador(requireActivity())}! A Sala ${SharedPreferences.getSala(requireActivity())} está com ${contadorPalestra} Participantes.")
+
+            }, { error ->
+                Log.i("Resultadojfs", "Erro Contagem: ${error.localizedMessage}")
+            })
+        subscriptions.add(subscribe)
+    }
 }

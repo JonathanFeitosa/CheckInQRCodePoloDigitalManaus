@@ -8,17 +8,26 @@ import com.google.gson.annotations.SerializedName;
 public class ReturnCredenciado implements Serializable
 {
 
-    @SerializedName("sucesso")
+    @SerializedName("msg")
     @Expose
-    private Sucesso sucesso;
-    private final static long serialVersionUID = 3571315943549069057L;
+    private String msg;
+    @SerializedName("participante")
+    @Expose
+    private String participante;
 
-    public Sucesso getSucesso() {
-        return sucesso;
+    public String getMsg() {
+        return msg;
     }
 
-    public void setSucesso(Sucesso sucesso) {
-        this.sucesso = sucesso;
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 
+    public String getParticipante() {
+        return participante;
+    }
+
+    public void setParticipante(String participante) {
+        this.participante = participante;
+    }
 }
