@@ -78,10 +78,9 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
         contarSincronizados()
         btnSincronizar.setOnClickListener{
 
-            var teste: List<RegistrarUsuario> = rUsuarioDAO.getAll()
-            for (usuarios in teste) {
-                Log.i("Sicronizados: ", " ${usuarios.id} - ${usuarios.qrcode} - ${usuarios.responsavel} - ${usuarios.palestra}")
-            }
+            MostrarProgressBar()
+            HasConnection(requireActivity(), "XXXX", 3).execute();
+
         }
     }
 
@@ -139,6 +138,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
                     val qrcode = mDialogView.edtQRCode.text.toString()
 
+                    MostrarProgressBar()
                     HasConnection(requireActivity(), qrcode, 1).execute();
 
                 }
@@ -169,6 +169,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ success ->
 
+                HideProgressBar()
                 val bundle = Bundle()
                 bundle.putString("qrcode", ru.qrcode)
                 bundle.putInt("contador", contadorPalestra)
@@ -176,6 +177,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                 findNavController().navigate(R.id.action_navigation_home_to_navigation_viewqrcode, bundle)
 
             }, { error ->
+                HideProgressBar()
                 var error2 = error
                 var errorMessage = ApiErrorCredencial(error, "msg")
 
@@ -296,6 +298,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                 } else if (result == false) {
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
 
+                    HideProgressBar()
                     var ru: RegistrarUsuario = RegistrarUsuario(
                         Integer.parseInt(
                             SharedPreferences.getIDPalestra(requireActivity())!!
@@ -309,8 +312,29 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+
                 }
-            }else{
+            }else if(type_info == 3){
+                if (result == null || result == true) {
+                    Log.d("ResultadoJFS", "COM INTERNET " + result)
+
+                    var teste: List<RegistrarUsuario> = rUsuarioDAO.getAll()
+                    for (usuarios in teste) {
+                        Log.i("Sicronizados: ", " ${usuarios.id} - ${usuarios.qrcode} - ${usuarios.responsavel} - ${usuarios.palestra}")
+                    }
+
+                } else if (result == false) {
+                    Toast.makeText(
+                        requireActivity(),
+                        "Sem Conexão com a internet no momento.",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                    Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
+                }
+            }
+
+            else{
                 if (result == null || result == true) {
                     Log.d("ResultadoJFS", "COM INTERNET " + result)
                     registrarContagem(Integer.parseInt(SharedPreferences.getIDPalestra(requireActivity())!!))
@@ -323,7 +347,10 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
             }
         }
     }
-
-
+    fun MostrarProgressBar() {
+        InternetProgressBar.setVisibility(View.VISIBLE)
+    }
+    fun HideProgressBar() {
+        InternetProgressBar.setVisibility(View.INVISIBLE)
+    }
 }
-
