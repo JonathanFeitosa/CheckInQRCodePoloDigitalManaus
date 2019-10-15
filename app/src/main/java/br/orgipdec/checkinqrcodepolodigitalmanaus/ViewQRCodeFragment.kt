@@ -3,7 +3,6 @@ package br.orgipdec.checkinqrcodepolodigitalmanaus
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import br.orgipdec.checkinqrcodepolodigitalmanaus.utils.SharedPreferences
 import kotlinx.android.synthetic.main.qrcode_active.*
 
 

@@ -2,7 +2,6 @@ package br.orgipdec.checkinqrcodepolodigitalmanaus.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import br.orgipdec.checkinqrcodepolodigitalmanaus.R
 
 class SharedPreferences {

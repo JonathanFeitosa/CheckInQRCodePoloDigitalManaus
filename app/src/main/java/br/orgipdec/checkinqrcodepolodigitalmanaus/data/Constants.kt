@@ -1,7 +1,5 @@
 package br.orgipdec.checkinqrcodepolodigitalmanaus.data
 
-import br.orgipdec.checkinqrcodepolodigitalmanaus.R
-
 /********************************************************************************
  * Created by Anartz Mugika (mugan86@gmail.com) on 13/7/18.
  ********************************************************************************/

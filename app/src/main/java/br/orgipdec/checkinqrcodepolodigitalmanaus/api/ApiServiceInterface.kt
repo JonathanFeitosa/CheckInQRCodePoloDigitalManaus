@@ -3,7 +3,6 @@ package br.orgipdec.checkinqrcodepolodigitalmanaus.api
 import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.*
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*

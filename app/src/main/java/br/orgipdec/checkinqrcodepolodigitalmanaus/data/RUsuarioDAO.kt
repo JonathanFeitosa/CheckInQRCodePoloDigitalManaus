@@ -4,8 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.RegistrarUsuario
-import io.reactivex.Maybe
-import io.reactivex.Single
 
 
 @Dao

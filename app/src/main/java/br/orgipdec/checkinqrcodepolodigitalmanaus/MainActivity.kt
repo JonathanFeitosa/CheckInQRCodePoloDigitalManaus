@@ -9,26 +9,15 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.orgipdec.checkinqrcodepolodigitalmanaus.api.ApiServiceInterface
-import br.orgipdec.checkinqrcodepolodigitalmanaus.data.Constants
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.Day
 import br.orgipdec.checkinqrcodepolodigitalmanaus.model.ReturnAPIIPDEC
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.Talk
-import br.orgipdec.checkinqrcodepolodigitalmanaus.model.Trilha
 import br.orgipdec.checkinqrcodepolodigitalmanaus.utils.SharedPreferences
-import com.google.gson.Gson
-import com.ogulcan.android.mvp.app.models.DetailsViewModel
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.BufferedReader
-import java.io.File
-
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private val subscriptions = CompositeDisposable()
