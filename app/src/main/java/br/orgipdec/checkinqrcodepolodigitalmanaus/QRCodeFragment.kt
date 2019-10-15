@@ -184,6 +184,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
 
                 }else {
 
+                    Log.i("ResultadoJFS", "Erro: ${errorMessage.message}")
                     Toast.makeText(requireActivity(), "Erro: ${errorMessage.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -315,16 +316,19 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         Log.i("Sicronizados: ", " ${usuarios.id} - ${usuarios.qrcode} - ${usuarios.responsavel} - ${usuarios.palestra}")
                         rUsuarioDAO.deleteById(usuarios.id!!)
                     }
+                    Toast.makeText(
+                        requireActivity(),
+                        "Todos os dados foram sincronizados com o nosso servidor.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     contarSincronizados()
-
 
                 } else if (result == false) {
                     Toast.makeText(
                         requireActivity(),
-                        "Internet Lenta ou sem Conexão com a internet no momento.",
+                        "Internet Lenta ou sem Conexão no momento.",
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
                 }
             }
@@ -344,9 +348,13 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
         }
     }
     fun MostrarProgressBar() {
+        QrCodeID.setVisibility(View.INVISIBLE)
+        pBarLayout.setVisibility(View.VISIBLE)
         InternetProgressBar.setVisibility(View.VISIBLE)
     }
     fun HideProgressBar() {
+        QrCodeID.setVisibility(View.VISIBLE)
+        pBarLayout.setVisibility(View.INVISIBLE)
         InternetProgressBar.setVisibility(View.INVISIBLE)
     }
 }
