@@ -78,6 +78,12 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        mScannerView!!.setResultHandler(this)
+        mScannerView!!.startCamera()
+    }
+
     override fun onPause() {
         super.onPause()
         this.cleanResult()
@@ -210,11 +216,14 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                     Log.i("ResultadoJFS", "Erro: ${errorMessage.message}")
                     Toast.makeText(requireActivity(), "Erro: ${errorMessage.message}", Toast.LENGTH_SHORT)
                         .show()
+                    mScannerView!!.setResultHandler(this)
+                    mScannerView!!.startCamera()
                 }
 
             })
         subscriptions.add(subscribe)
     }
+
 
     fun registrarContagem(palestra: Int) {
 
@@ -328,22 +337,48 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         Toast.LENGTH_SHORT
                     )
                         .show()
+                    voltarCamera()
+
 
                 }
             }else if(type_info == 3){
                 if (result == null || result == true) {
                     Log.d("ResultadoJFS", "COM INTERNET " + result)
 
-                    var teste: List<RegistrarUsuario> = rUsuarioDAO.getAll()
-                    for (usuarios in teste) {
-                        Log.i("Sicronizados: ", " ${usuarios.id} - ${usuarios.qrcode} - ${usuarios.responsavel} - ${usuarios.palestra}")
-                        rUsuarioDAO.deleteById(usuarios.id!!)
-                    }
-                    Toast.makeText(
-                        requireActivity(),
-                        "Todos os dados foram sincronizados com o nosso servidor.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    var infoAllUsers: List<RegistrarUsuario> = rUsuarioDAO.getAll()
+
+                    for (usuarios in infoAllUsers) {
+
+                        var ru : RegistrarUsuario = RegistrarUsuario(usuarios.palestra, usuarios.qrcode!!, usuarios.responsavel!!)
+                        var subscribe = api.registrarQRCode(ru).subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe({ success ->
+
+                                rUsuarioDAO.deleteById(usuarios.id!!)
+
+                            }, { error ->
+                                var error2 = error
+                                var errorMessage = ApiErrorCredencial(error, "msg")
+
+                                if(errorMessage.message.equals("registradosucesso")) {
+
+                                    Toast.makeText(requireActivity(), "Usuário ${usuarios.qrcode!!} Sincronizado!", Toast.LENGTH_SHORT)
+                                        .show()
+
+                                }else {
+                                    Log.i("ResultadoJFS", "Erro: ${errorMessage.message}")
+                                    Toast.makeText(requireActivity(), "Erro ${usuarios.qrcode!!}: ${errorMessage.message}", Toast.LENGTH_SHORT)
+                                        .show()
+                                    voltarCamera()
+                                }
+                                rUsuarioDAO.deleteById(usuarios.id!!)
+
+                            })
+                            subscriptions.add(subscribe)
+
+                        }
+                     HideProgressBar()
+                    registrarContagem(Integer.parseInt(SharedPreferences.getIDPalestra(requireActivity())!!))
                     contarSincronizados()
 
                 } else if (result == false) {
@@ -353,6 +388,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
+                }
 
                 }else if(type_info == 4) {
                     if (result == null || result == true) {
@@ -362,11 +398,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         requireActivity().finish()
 
                     } else if (result == false) {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Internet Lenta ou sem Conexão no momento.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireActivity(),"Internet Lenta ou sem Conexão no momento.", Toast.LENGTH_LONG).show()
                         Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
                     }
                 }else if(type_info == 5) {
@@ -378,17 +410,11 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         requireActivity().finish()
 
                     } else if (result == false) {
-                        Toast.makeText(
-                            requireActivity(),
-                            "Internet Lenta ou sem Conexão no momento.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(requireActivity(),"Internet Lenta ou sem Conexão no momento.", Toast.LENGTH_LONG).show()
+
                         Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
                     }
                 }
-
-            }
-
             else{
                 if (result == null || result == true) {
                     Log.d("ResultadoJFS", "COM INTERNET " + result)
@@ -412,5 +438,9 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
         QrCodeID.setVisibility(View.VISIBLE)
         pBarLayout.setVisibility(View.INVISIBLE)
         InternetProgressBar.setVisibility(View.INVISIBLE)
+    }
+    fun voltarCamera(){
+        mScannerView!!.setResultHandler(this)
+        mScannerView!!.startCamera()
     }
 }

@@ -22,6 +22,9 @@ interface ApiServiceInterface {
     @POST("acesso/registrar/")
     fun registrarQRCode(@Body info : RegistrarUsuario) : Observable<ReturnCredenciado>
 
+    @POST("acesso/registrar-todos/")
+    fun registrarQRCodeAll(@Body list : List<RegistrarUsuario>) : Observable<ReturnCredenciado>
+
     companion object Factory {
         fun create(): ApiServiceInterface {
             // Retrofit.Builder() : Classe responsável por construir um objeto do tipo Retrofit.
