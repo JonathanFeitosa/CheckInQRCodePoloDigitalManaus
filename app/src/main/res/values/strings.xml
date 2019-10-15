@@ -12,4 +12,8 @@
 
     <string name="palestraid_file_key">save_idpalestra</string>
 
+    <string name="json_file_key">save_json</string>
+
+    <string name="downjson_file_key">downjson_json</string>
+
 </resources>

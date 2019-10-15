@@ -31,6 +31,7 @@ import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import io.reactivex.Single
+import kotlinx.android.synthetic.main.info_dialog2.view.*
 import java.net.InetSocketAddress
 import java.net.Socket
 
@@ -145,10 +146,32 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
             }
             R.id.alterarConfig -> {
 
-                SharedPreferences.setInfo(requireActivity(), false)
-                val intent = Intent(requireActivity(), MainActivity::class.java)
-                startActivity(intent)
+                MostrarProgressBar()
+                HasConnection(requireActivity(), "XXX", 4).execute();
 
+                true
+            }
+            R.id.alterarJSON -> {
+
+                val mDialogView = LayoutInflater.from(requireActivity()).inflate(R.layout.info_dialog2, null)
+                //AlertDialogBuilder
+                val mBuilder = AlertDialog.Builder(requireActivity())
+                    .setView(mDialogView)
+                    .setTitle("Atenção!")
+                //show dialog
+                val  mAlertDialog = mBuilder.show()
+                mDialogView.dialogRegistrarBtn2.setOnClickListener {
+                    mAlertDialog.dismiss()
+
+                    MostrarProgressBar()
+                    HasConnection(requireActivity(), "XXX", 5).execute();
+
+                }
+
+                mDialogView.dialogCancelBtn2XX.setOnClickListener {
+
+                    mAlertDialog.dismiss()
+                }
                 true
             }
             else ->
@@ -330,7 +353,40 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
+
+                }else if(type_info == 4) {
+                    if (result == null || result == true) {
+                        SharedPreferences.setInfo(requireActivity(), false)
+                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+
+                    } else if (result == false) {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Internet Lenta ou sem Conexão no momento.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
+                    }
+                }else if(type_info == 5) {
+                    if (result == null || result == true) {
+                        SharedPreferences.setInfo(requireActivity(), false)
+                        SharedPreferences.setDownJSON(requireActivity(), false)
+                        val intent = Intent(requireActivity(), MainActivity::class.java)
+                        startActivity(intent)
+                        requireActivity().finish()
+
+                    } else if (result == false) {
+                        Toast.makeText(
+                            requireActivity(),
+                            "Internet Lenta ou sem Conexão no momento.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
+                    }
                 }
+
             }
 
             else{
