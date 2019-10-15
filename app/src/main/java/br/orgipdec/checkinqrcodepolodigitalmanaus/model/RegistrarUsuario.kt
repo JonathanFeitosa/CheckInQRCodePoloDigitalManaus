@@ -1,14 +1,29 @@
 package br.orgipdec.checkinqrcodepolodigitalmanaus.model
 
-import com.google.gson.annotations.SerializedName
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-data class RegistrarUsuario(
-    val palestra: Int,
-    val qrcode: String,
-    val responsavel: String
-)
+@Entity
+class RegistrarUsuario {
 
-data class RegistrarUsuarioReturn(
-    @SerializedName("contador") val contador: Int,
-    @SerializedName("palestra") val palestra: Int,
-    @SerializedName("naocredenciado") val naocredenciado: String? = "teste")
+
+    @PrimaryKey(autoGenerate = true)  var id: Long? = null
+    @ColumnInfo(name = COLUMN_PALESTRA) var palestra: Int = 0
+    @ColumnInfo(name = COLUMN_QRCODE) var qrcode: String? = null
+    @ColumnInfo(name = COLUMN_RESPONSAVEL) var responsavel: String? = null
+
+
+    constructor(palestra : Int, qrcode : String, responsavel: String){
+        this.palestra = palestra
+        this.qrcode = qrcode
+        this.responsavel = responsavel
+
+    }
+    companion object {
+        const val COLUMN_PALESTRA = "palestra"
+        const val COLUMN_QRCODE = "qrcode"
+        const val COLUMN_RESPONSAVEL = "responsavel"
+    }
+
+}
