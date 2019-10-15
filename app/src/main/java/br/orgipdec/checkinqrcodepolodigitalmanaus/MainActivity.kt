@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .subscribe({ list: ReturnAPIIPDEC? ->
 
                 list!!.days.forEach { // Dias
-                    listaDia!!.add(it.id)
+                    listaDia!!.add("Dia ${it.id}")
                     }
 
                 // Adapter do Dia !
@@ -150,7 +150,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .subscribe({ list: ReturnAPIIPDEC? ->
 
                 list!!.days.forEach {
-                    if(it.id.equals(dia)) {
+                    if(("Dia ${it.id}").equals(dia)) {
                         it.trilha.forEach {
                             // Salas
                             listaSala!!.add("${it.room} - ${it.title}")
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .subscribe({ list: ReturnAPIIPDEC? ->
 
                 list!!.days.forEach {
-                    if(it.id.equals(sala)) {
+                    if(("Dia ${it.id}").equals(sala)) {
                         it.trilha.forEach {
                             if ("${it.room} - ${it.title}".equals(trilha)) {
                                 it.talks.forEach {

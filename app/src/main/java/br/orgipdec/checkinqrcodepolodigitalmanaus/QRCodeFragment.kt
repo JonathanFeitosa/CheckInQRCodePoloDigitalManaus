@@ -291,7 +291,6 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                 } else if (result == false) {
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
 
-                    HideProgressBar()
                     var ru: RegistrarUsuario = RegistrarUsuario(
                         Integer.parseInt(
                             SharedPreferences.getIDPalestra(requireActivity())!!
@@ -301,7 +300,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                     contarSincronizados()
                     Toast.makeText(
                         requireActivity(),
-                        "Sem Conexão. Os dados foram salvos no celular.",
+                        "Internet Lenta ou Sem Conexão. Os dados foram salvos no celular.",
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -314,12 +313,15 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                     var teste: List<RegistrarUsuario> = rUsuarioDAO.getAll()
                     for (usuarios in teste) {
                         Log.i("Sicronizados: ", " ${usuarios.id} - ${usuarios.qrcode} - ${usuarios.responsavel} - ${usuarios.palestra}")
+                        rUsuarioDAO.deleteById(usuarios.id!!)
                     }
+                    contarSincronizados()
+
 
                 } else if (result == false) {
                     Toast.makeText(
                         requireActivity(),
-                        "Sem Conexão com a internet no momento.",
+                        "Internet Lenta ou sem Conexão com a internet no momento.",
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -338,6 +340,7 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
                 }
             }
+            HideProgressBar()
         }
     }
     fun MostrarProgressBar() {
