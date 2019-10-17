@@ -389,7 +389,6 @@ class QRCodeFragment : Fragment(), ZXingScannerView.ResultHandler {
                     ).show()
                     Log.d("ResultadoJFS", "No network available!_HS1 >> $result")
                 }
-
                 }else if(type_info == 4) {
                     if (result == null || result == true) {
                         SharedPreferences.setInfo(requireActivity(), false)

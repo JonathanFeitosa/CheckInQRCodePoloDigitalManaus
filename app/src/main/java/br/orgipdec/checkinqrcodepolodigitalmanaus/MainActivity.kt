@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 SharedPreferences.setSala(this, listaSala.get(spnSala.getSelectedItemPosition()))
                 SharedPreferences.setPalestra(this, listaPalestra.get(spnPalestra.getSelectedItemPosition()))
 
+                setPalestra()
+                Log.i("Resultadojfs", "PALESTRA ID: + ${SharedPreferences.getIDPalestra(this)}")
+
                 launchActivity()
             }
         }
@@ -169,7 +172,6 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                             if ("${it.room} - ${it.title}".equals(trilha)) {
                                 it.talks.forEach {
                                     listaPalestra!!.add(it.title)
-                                    SharedPreferences.setIDPalestra(this, "${it.talkId}")
                                 }
                             }
                         }
@@ -180,6 +182,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 aAdaptePalestra.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spnPalestra!!.setAdapter(aAdaptePalestra)
                 pbCarregarTela.setVisibility(View.INVISIBLE) // INVISIBLE PROGRESSBAR
+    }
+    fun setPalestra() {
+
+        listaJSON!!.days.forEach {
+                it.trilha.forEach {
+                        it.talks.forEach {
+                            if(listaPalestra.get(spnPalestra.getSelectedItemPosition()).equals("${it.title}")) {
+                                SharedPreferences.setIDPalestra(this, "${it.talkId}")
+                                Log.i("Resultadojfs", "ENTROU + ${it.talkId}")
+                                return
+                            }
+                        }
+                }
+        }
     }
     fun receberJSON() {
 
